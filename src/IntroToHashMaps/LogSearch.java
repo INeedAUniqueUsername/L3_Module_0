@@ -1,5 +1,15 @@
 package IntroToHashMaps;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 public class LogSearch {
   /* 
 	 * Crate a HashMap of Integers for the keys and Strings for the values.
@@ -28,4 +38,67 @@ public class LogSearch {
 	 * 				is not in the list. 
 	 *
 	 * */
+	public static void main(String[] args) {
+		new LogSearch();
+	}
+	HashMap<Integer, String> entries;
+	JFrame frame;
+	public LogSearch() {
+		entries = new HashMap<>();
+		frame = new JFrame() {{
+			add(new JPanel() {{
+				add(new JButton("Add Entry") {{
+					addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							String id = JOptionPane.showInputDialog("ID");
+							try {
+								entries.put(Integer.valueOf(id), JOptionPane.showInputDialog("Name"));
+							} catch(Exception ex) {
+								JOptionPane.showMessageDialog(frame, "ID must be a valid number");
+							}
+						}
+					});
+				}});
+				add(new JButton("Lookup Entry") {{
+					addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							String id = JOptionPane.showInputDialog("ID");
+							try {
+								String result = entries.get(Integer.valueOf(id));
+								JOptionPane.showMessageDialog(frame, result == null ? "Unknown ID" : result);
+							} catch(Exception ex) {
+								JOptionPane.showMessageDialog(frame, "ID must be a valid number");
+							}
+						}
+					});
+				}});
+				add(new JButton("View Entries") {{
+					addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							String s = "";
+							for(Entry<Integer, String> entry : entries.entrySet()) {
+								s += String.format("ID: %-15s Name: %s", entry.getKey(), entry.getKey());
+							}
+							JOptionPane.showMessageDialog(frame, s.isEmpty() ? "No entries": s.replaceFirst("\n$", ""));
+						}
+					});
+				}});
+				add(new JButton("Remove Entry") {{
+					addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							try {
+								String name = entries.remove(Integer.valueOf(JOptionPane.showInputDialog("ID")));
+								JOptionPane.showMessageDialog(frame, name == null ? "Unknown ID" : String.format("Removed %s", name));
+							} catch(Exception ex) {
+								JOptionPane.showMessageDialog(frame, "ID must be a valid number");
+							}
+							
+						}
+					});
+				}});
+			}});
+			pack();
+			setVisible(true);
+		}};
+	}
 }
